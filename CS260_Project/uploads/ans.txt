@@ -1,0 +1,190 @@
+ Save as 
+
+shell_01.sh
+shell_02.sh
+shell_03.sh
+shell_04.sh
+shell_05.sh
+shell_06.sh
+shell_07.sh
+shell_08.sh
+shell_09.sh
+shell_10.sh
+shell_11.sh
+shell_12.sh
+shell_13.sh 
+
+++++++++++++++
+Q1)
+# q1...................................................
+
+#current working directory
+echo "Current working directory:"
+pwd
+
+# username
+echo "Current username:"
+whoami
+
+# Print the date 
+echo "Today is: $(date +'%d/%m/%Y')"
+
+++++++++++++++
+Q2)
+ps aux | grep -v "grep" | grep -c "/bin/bash"
+
+
+++++++++++++++
+Q3)
+# Create directory
+mkdir -p test
+
+# open directory
+cd test
+
+# the current working directory
+echo "Current working directory:"
+pwd
+
+# Save path.txt
+pwd > path.txt
+
+++++++++++++++
+Q4)
+
+find . -type f -name "*.txt" ! -path "./football.txt/*"
+
+++++++++++++++
+Q5)
+# Get the filename from the user or as an argument
+read -p "Enter the filename: " filename
+
+# Extract the basename, extension, and full filename 
+basename=$(echo "$filename" | sed 's/\.[^.]*$//')
+extension=$(echo "$filename" | sed 's/^.*\.//' )
+full_filename=$(echo "$filename")
+
+# Display the extracted information
+echo "basename = $basename"
+echo "extension = $extension"
+echo "full filename = $full_filename"
+
+
+++++++++++++++
+Q6)
+r_num=$(( (RANDOM % 20) + 1 ))
+at=3
+
+while [ $at -gt 0 ]; do
+    read -p "Enter a number between 1 and 20: " g
+
+    if [ $g -lt $r_num ]; then
+        echo "Entered number is SMALLER"
+    elif [ $g -gt $r_num ]; then
+        echo "Entered number is BIGGER"
+    else 
+        echo "Output message: Entered number is MATCHED"
+        break
+    fi
+
+    ((at--))
+done
+
+if [ $at -eq 0 ]; then
+    echo "You have used all your attempts. The correct number was $r_num"
+fi
+
+
+++++++++++++++
+Q7)
+
+
+#User Input
+read -p "Enter first number: " a
+read -p "Enter second number: " b
+read -p "Enter operator (+, -, *, /): " o
+
+# Perform calculations based on the operator using case...esac
+case $o in
+    "+")
+        echo "Result: $a + $b = $((a + b))"
+        ;;
+    "-")
+        echo "Result: $a - $b = $((a - b))"
+        ;;
+    "*")
+        echo "Result: $a * $b = $((a * b))"
+        ;;
+    "/")
+        if [ $b -eq 0 ]; then
+            echo "Error: Division by zero is not allowed."
+        else
+            echo "Result: $a / $b = $(bc -l <<< "scale=2; $a / $b")"
+        fi
+        ;;
+    *)
+        echo "Invalid operator. Please enter +, -, *, or /"
+        ;;
+esac
+
+++++++++++++++	
+Q9)
+
+# Check if the directory exists
+dit="somefiles/images/"
+if [ -d "$dit" ]; then
+    # Convert .jpg files to .bmp using ImageMagick's convert command
+    cd "$dit" || exit
+    for f_nam in *.jpg; do
+        if [ -f "$f_nam" ]; then
+            f_nam2=$(basename -- "$f_nam")
+            f_nam2="${f_nam2%.*}"
+            convert "$f_nam" "${f_nam2}.bmp"
+            echo "Converted $f_nam to ${f_nam2}.bmp"
+        fi
+    done
+else
+    echo "Directory $dit doesn't exist."
+fi
+
+++++++++++++++
+Q10)
+
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <directory_name>"
+    exit 1
+fi
+
+d="$1"
+
+# Search for a specific file 
+sf="example.txt"
+if [ -e "$d/$sf" ]; then
+    echo "File $sf found in $d."
+else
+    echo "File $sf not found in $d."
+fi
+
+# Count total number of files and directories 
+fc=$(find "$d" -type f | wc -l)
+dc=$(find "$d" -type d | wc -l)
+echo "Total files: $fc"
+echo "Total directories: $dc"
+
+# Delete all files with .c extension in a specific directory (e.g., "src")
+sd="$d/src"
+if [ -d "$sd" ]; then
+    find "$sd" -type f -name "*.c" -delete
+    echo "Deleted all .c files in $sd."
+else
+    echo "$sd does not exist."
+fi
+
+# Delete all files with 0 bytes in the current directory
+find . -maxdepth 1 -type f -size 0 -exec rm {} \;
+echo "Deleted all files with 0 bytes in the current directory."
+++++++++++++++
+Q13)
+
+echo "Number of command-line parameters passed: $#"
+
